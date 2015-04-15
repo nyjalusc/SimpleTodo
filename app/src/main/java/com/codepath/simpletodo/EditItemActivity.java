@@ -1,8 +1,8 @@
 package com.codepath.simpletodo;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,7 +23,7 @@ public class EditItemActivity extends ActionBarActivity {
      */
     private void populateFields() {
         // Extract the values passed from parent activity
-        String value = getIntent().getStringExtra("value");
+        String value = getIntent().getStringExtra("currentValue");
 
         // Get the editText element
         EditText etEditTextField = (EditText) findViewById(R.id.etTextField);
@@ -70,7 +70,7 @@ public class EditItemActivity extends ActionBarActivity {
         // Prepare data intent
         Intent data = new Intent();
         // Pass relevant data back as a result
-        data.putExtra("value", etItem.getText().toString());
+        data.putExtra("newItemValue", etItem.getText().toString());
         data.putExtra("position", position);
         // Activity finished ok, return the data
         setResult(RESULT_OK, data); // set result code and bundle data for response
