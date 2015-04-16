@@ -13,19 +13,22 @@ public class Item extends Model {
     // This is a regular field
     @Column(name = "Name", index = true)
     public String name;
+    @Column(name = "DueDate", index = true)
+    public String dueDate;
 
     // Make sure to have a default constructor for every ActiveAndroid model
     public Item(){
         super();
     }
 
-    @Override
-    public String toString() {
-        return name;
-    }
+//    @Override
+//    public String toString() {
+//        return name;
+//    }
 
     public Item(String name){
         super();
         this.name = name;
+        this.dueDate = new String("2000-01-01");
     }
 }

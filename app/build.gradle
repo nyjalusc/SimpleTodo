@@ -35,3 +35,13 @@ dependencies {
     compile 'com.android.support:appcompat-v7:21.0.3'
     compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
 }
+
+repositories{
+    maven {
+        url 'http://dl.bintray.com/amulyakhare/maven'
+    }
+}
+
+dependencies {
+    compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
+}

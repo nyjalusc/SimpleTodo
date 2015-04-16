@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="6dip" >
+
+    <!--android:typeface="monospace"-->
+    <ImageView android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/ivLabel"/>
+
+
+    <TextView
+        android:id="@+id/tvtodoItemName"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="asdf asdfj sdjsdjwe weweijrqe "
+        android:layout_alignRight="@+id/tvDueDate"
+        android:layout_alignEnd="@+id/tvDueDate"
+        android:gravity="left|center"
+        android:layout_alignParentTop="true"
+        android:textSize="18dp"
+        android:layout_toEndOf="@+id/ivLabel"
+        android:paddingLeft="15dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvDueDate"
+        android:text="asdfa sdf sdk sdi sdsf"
+        android:singleLine="true"
+        android:gravity="right"
+        android:textStyle="italic"
+        android:textColor="#7e949494"
+        android:textSize="12dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/tvtodoItemName" />
+</RelativeLayout>

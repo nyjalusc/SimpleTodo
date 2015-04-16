@@ -15,12 +15,13 @@ import android.widget.Toast;
 import com.codepath.Helper.DatabaseHelper;
 import com.codepath.model.Item;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity {
 
-    private ArrayAdapter<Item> todoItemsAdapter;
+    private TodoItemAdapter todoItemsAdapter;
     private ListView lvItems;
     private DatabaseHelper dbHelper;
     private final int REQUEST_CODE = 20;
@@ -41,7 +42,11 @@ public class MainActivity extends ActionBarActivity {
         List<Item> todoItems = readItems();
         // Initialize adapter; here simple_list_item_1 is a reference to an built-in XML layout
         // document that is part of the Android OS, rather than one of my own XML layouts
-        todoItemsAdapter = new ArrayAdapter<Item>(this, android.R.layout.simple_list_item_1, todoItems);
+//        todoItemsAdapter = new ArrayAdapter<Item>(this, android.R.layout.simple_list_item_1, todoItems);
+        ArrayList<Item> atodoItems = new ArrayList<Item>();
+        atodoItems.addAll(todoItems);
+        todoItemsAdapter = new TodoItemAdapter(this, atodoItems);
+
         // Connect the adapter to listView element
         lvItems.setAdapter(todoItemsAdapter);
         setupListViewListener();
@@ -52,8 +57,19 @@ public class MainActivity extends ActionBarActivity {
         // DELETION LOGIC
         lvItems.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                deleteSingleItemAndRefreshView(position);
+            public boolean onItemLongClick(AdapterView<?> parent, final View view, final int position, long id) {
+                // Fade-out animation effect
+                view.animate().setDuration(1000).alpha(0)
+                        .withEndAction(new Runnable() {
+                            @Override
+                            public void run() {
+                                deleteSingleItemAndRefreshView(position);
+                                view.setAlpha(1);
+                            }
+                        });
+//                deleteSingleItemAndRefreshView(position);
+                // Toast the success of update operation
+                Toast.makeText(MainActivity.this, "Item deleted", Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
@@ -64,7 +80,8 @@ public class MainActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // NOTE: Casting - (String) parent.getItemAtPosition(position) will fail
                 // Explicitly invoke the toString() over the Item object
-                String currentItemValue = parent.getItemAtPosition(position).toString();
+                Item clickedItem = (Item) parent.getItemAtPosition(position);
+                String currentItemValue = clickedItem.name;
 
                 // first parameter is the context, second is the class of the activity to launch
                 Intent i = new Intent(MainActivity.this, EditItemActivity.class);
