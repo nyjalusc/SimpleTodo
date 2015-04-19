@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="dark_teal" type="color">#00695C</item>
+    <item name="teal" type="color">#009688</item>
+    <item name="grey" type="color">#9E9E9E</item>
+</resources>

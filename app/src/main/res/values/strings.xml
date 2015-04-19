@@ -4,9 +4,10 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="enter_new_item">Enter a new item</string>
-    <string name="add_item">Add item</string>
+    <string name="add_item">+</string>
     <string name="title_activity_edit_item">Edit Item</string>
     <string name="tvEditItem">Edit Item Below:</string>
-    <string name="btnSave">Save</string>
     <string name="tvEditItemLabel">Edit Item Below:</string>
+    <string name="editDate">Edit Date</string>
+    <string name="editTIme">Edit Time</string>
 </resources>

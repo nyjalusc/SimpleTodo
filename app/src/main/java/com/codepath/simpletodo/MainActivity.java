@@ -1,27 +1,38 @@
 package com.codepath.simpletodo;
 
+import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.codepath.Helper.DatabaseHelper;
 import com.codepath.model.Item;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity {
 
     private TodoItemAdapter todoItemsAdapter;
+    private static Calendar calendar;
     private ListView lvItems;
     private DatabaseHelper dbHelper;
     private final int REQUEST_CODE = 20;
@@ -30,6 +41,13 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Wasted lot of time to set the color of actionbar from xml but failed :(
+        // Finally gave up and decided to set it programmatically
+        // Bad Design: Fix it after figuring out a way to do this through resources
+        Resources res = getResources();
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setBackgroundDrawable(new ColorDrawable(res.getColor(R.color.teal)));
         init();
     }
 
@@ -52,6 +70,9 @@ public class MainActivity extends ActionBarActivity {
         setupListViewListener();
     }
 
+    /**
+     * OnClickListeners for listView are defined here.
+     */
     private void setupListViewListener() {
 
         // DELETION LOGIC
@@ -67,7 +88,6 @@ public class MainActivity extends ActionBarActivity {
                                 view.setAlpha(1);
                             }
                         });
-//                deleteSingleItemAndRefreshView(position);
                 // Toast the success of update operation
                 Toast.makeText(MainActivity.this, "Item deleted", Toast.LENGTH_SHORT).show();
                 return true;
@@ -105,48 +125,25 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
-     * Time to handle the result of the sub-activity
+     * The child intent performed the edit operation and returned the result.
+     * Since the underlying data has changed the listView is reloaded.
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // REQUEST_CODE is defined above
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
-            // Extract data from result extras
-            String newItemValue = data.getExtras().getString("newItemValue");
-            int position = data.getExtras().getInt("position");
+            // The underlying content of the listview got changed after the update so refresh it
+            refreshListView();
 
-            // Get the todoItem at position
-            Item updateItem = getTodoItemAtPosition(position);
-
-            // Update the item value and write it in the data store
-            updateTodoItem(updateItem, newItemValue, position);
-
-            // Toast the success of update operation
+            // Toast the success of update operation in main activity
             Toast.makeText(this, "Item updated", Toast.LENGTH_SHORT).show();
         }
     }
 
     /**
-     * Returns Item object from the db
-     * Here position is between [0..(NUM_OF_ROWS_IN_DB - 1)]
-     * @param position
-     * @return
+     * Reload the adapter
      */
-    private Item getTodoItemAtPosition(int position) {
-        return dbHelper.getItem(position);
-    }
-
-    /**
-     * Update the value of the item and reload the adapter
-     * @param newValue
-     * @param position
-     */
-    private void updateTodoItem(Item updateItem, String newValue, int position) {
-        updateItem.name = newValue;
-        updateItem.save();
-        // tried to use insert() to only update the required object but it did not work
-        // This looks like an expensive operation but couldn't figure out a clean way to update
-        // the adapter.
+    private void refreshListView() {
         todoItemsAdapter.clear();
         todoItemsAdapter.addAll(dbHelper.getAll());
         todoItemsAdapter.notifyDataSetChanged();
@@ -191,8 +188,23 @@ public class MainActivity extends ActionBarActivity {
         EditText etNewItem = (EditText) findViewById(R.id.etNewItem);
         String itemValue = etNewItem.getText().toString();
 
+        if (itemValue.length() == 0) {
+            Toast.makeText(this, "No item to add", Toast.LENGTH_SHORT).show();
+            // VERY IMPORTANT: Reset the calendar object
+            // The user can setup the due-date and never specify a string value before hitting
+            // Add button. In such case the calendar should be reset.
+            calendar = null;
+            return;
+        }
+
         // Create new item and save it in the database
         Item item = new Item(itemValue);
+        // Set the Due-date for the item; It is an optional attribute
+        if (calendar != null) {
+            item.setDueDate(calendar);
+        }
+        // Important: Reset the calendar object
+        calendar = null;
         item.save();
 
         // Insert the object in adapter
@@ -200,5 +212,58 @@ public class MainActivity extends ActionBarActivity {
 
         // Empty the edit text field once the operation completes
         etNewItem.setText("");
+    }
+
+    /**
+     * Renders the DatePicker and sets up onClickListener for TimePicker
+     * @param view
+     */
+    public void showDatePicker(View view) {
+            final View dialogView = View.inflate(this, R.layout.date_picker, null);
+            final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+
+            dialogView.findViewById(R.id.ibSaveDate).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    DatePicker datePicker = (DatePicker) dialogView.findViewById(R.id.date_picker);
+                    if (calendar == null) {
+                        calendar = new GregorianCalendar(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
+                    } else {
+                        // This is to handle the case where the user is trying to edit the previously
+                        // saved due-date but has not added the item yet by pressing the "Add button"
+                        calendar.set(Calendar.YEAR, datePicker.getYear());
+                        calendar.set(Calendar.HOUR, datePicker.getMonth());
+                        calendar.set(Calendar.MINUTE, datePicker.getDayOfMonth());
+                    }
+                    // When the "Done" action is performed load the TimePicker
+                    showTimePicker(view);
+                    // Destroy the view after the operations complete
+                    alertDialog.dismiss();
+                }
+            });
+//            alertDialog.setTitle("Set target datetime");
+            alertDialog.setView(dialogView);
+            alertDialog.show();
+    }
+
+    /**
+     * This method won't be called without getting showDatePicker being called first
+     * @param view
+     */
+    public void showTimePicker(View view) {
+        final View dialogView = View.inflate(this, R.layout.time_picker, null);
+        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+
+        dialogView.findViewById(R.id.ibSaveTime).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TimePicker timePicker = (TimePicker) dialogView.findViewById(R.id.time_picker);
+                calendar.set(Calendar.HOUR, timePicker.getCurrentHour());
+                calendar.set(Calendar.MINUTE, timePicker.getCurrentMinute());
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.setView(dialogView);
+        alertDialog.show();
     }
 }

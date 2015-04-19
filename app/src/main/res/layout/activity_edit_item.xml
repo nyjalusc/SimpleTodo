@@ -1,37 +1,82 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:layout_height="match_parent" android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.codepath.simpletodo.EditItemActivity">
 
     <TextView
+        android:id="@+id/tvEditItemLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/tvEditItemLabel"
-        android:id="@+id/tvEditItemLabel" />
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
-        android:ems="10"
         android:id="@+id/etTextField"
-        android:layout_marginTop="47dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/btnSave"
-        android:id="@+id/btnSave"
-        android:onClick="onSave"
-        android:layout_below="@+id/etTextField"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="38dp" />
+        android:layout_marginTop="47dp"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:layout_toLeftOf="@+id/ibEditDueDate"
+        android:layout_toStartOf="@+id/ibEditDueDate" />
+
+    <!--<Button-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="@string/btnSave"-->
+    <!--android:id="@+id/btnSave"-->
+    <!--android:onClick="onSave"-->
+    <!--android:layout_below="@+id/etTextField"-->
+    <!--android:layout_alignParentLeft="true"-->
+    <!--android:layout_alignParentStart="true"-->
+    <!--android:layout_marginTop="38dp" />-->
+
+    <ImageButton
+        android:id="@+id/ibSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:onClick="onSave"
+        android:src="@drawable/done_button"
+        android:layout_alignTop="@+id/etTextField"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ibEditDueDate"
+        android:src="@drawable/duedate_button"
+        android:onClick="showDatePicker"
+        android:background="@null"
+        android:layout_alignTop="@+id/ibSave"
+        android:layout_toLeftOf="@+id/ibSave"
+        android:layout_toStartOf="@+id/ibSave" />
+
+
+    <!--<Button-->
+        <!--android:id="@+id/btnEditDate"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignTop="@+id/ibSave"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:onClick="showDatePicker"-->
+        <!--android:text="@string/editDate" />-->
+
+    <!--<Button-->
+        <!--android:id="@+id/button"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_alignTop="@+id/btnEditDate"-->
+        <!--android:onClick="showTimePicker"-->
+        <!--android:text="@string/editTIme" />-->
+
 
 </RelativeLayout>

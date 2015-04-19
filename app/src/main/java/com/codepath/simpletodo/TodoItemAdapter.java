@@ -53,7 +53,13 @@ public class TodoItemAdapter extends ArrayAdapter<Item> {
         viewHolder.todoItemName.setText(item.name);
         // Make the TextView scrollable to fit long lines
 //        viewHolder.todoItemName.setMovementMethod(new ScrollingMovementMethod());
-        viewHolder.dueDate.setText("Due date: " + item.dueDate);
+
+        // Show the due-date only if it was set for the item. It is an optional attribute
+        if (item.getDueDate().isEmpty()) {
+            viewHolder.dueDate.setText("");
+        } else {
+            viewHolder.dueDate.setText("Due date: " + item.getDueDate());
+        }
         viewHolder.letterLabel.setImageDrawable(drawable);
         // Return the completed view to render on screen
         return convertView;
