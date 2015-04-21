@@ -3,4 +3,5 @@
     <item name="dark_teal" type="color">#00695C</item>
     <item name="teal" type="color">#009688</item>
     <item name="grey" type="color">#9E9E9E</item>
+    <item name="pink" type="color">#FFCDD2</item>
 </resources>

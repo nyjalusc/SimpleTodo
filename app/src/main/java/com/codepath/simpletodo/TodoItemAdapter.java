@@ -14,6 +14,7 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.codepath.model.Item;
 
+import java.util.Date;
 import java.util.ArrayList;
 
 public class TodoItemAdapter extends ArrayAdapter<Item> {
@@ -46,6 +47,13 @@ public class TodoItemAdapter extends ArrayAdapter<Item> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
+        // Color the row if item's due-date has gone past the current dateTime
+        if ((item.getDueDate() != null) && (item.getDueDate().compareTo(new Date()) < 0)) {
+            convertView.setBackgroundResource(R.color.pink);
+        } else {
+            convertView.setBackgroundColor(0);
+        }
+
         // Get the drawable letter label
         TextDrawable drawable = getDrawable(item);
 
@@ -55,10 +63,10 @@ public class TodoItemAdapter extends ArrayAdapter<Item> {
 //        viewHolder.todoItemName.setMovementMethod(new ScrollingMovementMethod());
 
         // Show the due-date only if it was set for the item. It is an optional attribute
-        if (item.getDueDate().isEmpty()) {
+        if (item.getFormattedDueDate().isEmpty()) {
             viewHolder.dueDate.setText("");
         } else {
-            viewHolder.dueDate.setText("Due date: " + item.getDueDate());
+            viewHolder.dueDate.setText("Due date: " + item.getFormattedDueDate());
         }
         viewHolder.letterLabel.setImageDrawable(drawable);
         // Return the completed view to render on screen

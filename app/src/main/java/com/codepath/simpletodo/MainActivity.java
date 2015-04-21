@@ -61,9 +61,10 @@ public class MainActivity extends ActionBarActivity {
         // Initialize adapter; here simple_list_item_1 is a reference to an built-in XML layout
         // document that is part of the Android OS, rather than one of my own XML layouts
 //        todoItemsAdapter = new ArrayAdapter<Item>(this, android.R.layout.simple_list_item_1, todoItems);
-        ArrayList<Item> atodoItems = new ArrayList<Item>();
-        atodoItems.addAll(todoItems);
-        todoItemsAdapter = new TodoItemAdapter(this, atodoItems);
+        ArrayList<Item> allItems = new ArrayList<Item>();
+        allItems.addAll(todoItems);
+//        Collections.reverse(allItems);
+        todoItemsAdapter = new TodoItemAdapter(this, allItems);
 
         // Connect the adapter to listView element
         lvItems.setAdapter(todoItemsAdapter);

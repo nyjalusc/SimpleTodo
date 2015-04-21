@@ -73,12 +73,15 @@ public class Item extends Model {
             this.dueDate = calendar.getTime();
         }
     }
-
-    public String getDueDate() {
-        return getDueDate("MMM dd HH:mm");
+    public Date getDueDate() {
+        return dueDate;
     }
 
-    public String getDueDate(String format) {
+    public String getFormattedDueDate() {
+        return getFormattedDueDate("MMM dd HH:mm");
+    }
+
+    public String getFormattedDueDate(String format){
         if (this.dueDate == null) {
             return "";
         }
