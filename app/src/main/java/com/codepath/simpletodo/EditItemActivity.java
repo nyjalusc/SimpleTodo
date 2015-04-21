@@ -45,11 +45,11 @@ public class EditItemActivity extends ActionBarActivity {
      */
     private void populateFields() {
         // Extract the values passed from parent activity
-        String value = getIntent().getStringExtra("currentValue");
-        int position = getIntent().getIntExtra("position", 0);
-        // Get the original item object from the db which is going to be edited
-        updateItem = getTodoItemAtPosition(position);
+        long itemId = getIntent().getLongExtra("itemId", 0);
 
+        // Use the itemId to find the Item object
+        updateItem = dbHelper.getItem(itemId);
+        String value = updateItem.getName();
         // Get the editText element
         EditText etEditTextField = (EditText) findViewById(R.id.etTextField);
         // Set the value of the editText field
@@ -90,7 +90,7 @@ public class EditItemActivity extends ActionBarActivity {
         // Get the new value of item from editText
         String newValue = etItem.getText().toString();
         // Update Item name
-        updateItem.name = newValue;
+        updateItem.setName(newValue);
 
         // If calendar is not null, it means that the dueDate was edited
         if (calendar != null) {
@@ -102,16 +102,6 @@ public class EditItemActivity extends ActionBarActivity {
 
         setResult(RESULT_OK, null); // set result code and bundle data for response
         finish(); // closes the activity, pass data to parent
-    }
-
-    /**
-     * Returns Item object from the db
-     * Here position is between [0..(NUM_OF_ROWS_IN_DB - 1)]
-     * @param position
-     * @return
-     */
-    private Item getTodoItemAtPosition(int position) {
-        return dbHelper.getItem(position);
     }
 
     /**

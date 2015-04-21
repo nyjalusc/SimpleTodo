@@ -27,16 +27,14 @@ public class DatabaseHelper {
     }
 
     /**
-     * Use LIMIT (n, 1) to setup a correlation between the listview row and the DB object
-     * Returns Nth row from the 1st row in table
-     * @param position
+     * Here "Id" is an auto-generated column which is used as a primary key.
+     * @param itemId
      * @return
      */
-    public Item getItem(int position) {
-        Integer pos = new Integer(position);
-        return SQLiteUtils.rawQuerySingle(Item.class,
-                "SELECT * from Items LIMIT ?, 1",
-                new String[] {pos.toString()}
-        );
+    public Item getItem(long itemId) {
+        return new Select()
+                .from(Item.class)
+                .where("Id = ?", itemId).executeSingle();
+
     }
 }

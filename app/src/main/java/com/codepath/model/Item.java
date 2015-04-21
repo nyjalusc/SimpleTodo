@@ -26,53 +26,23 @@ public class Item extends Model {
         super();
     }
 
-//    @Override
-//    public String toString() {
-//        return name;
-//    }
-
     public Item(String name){
         super();
         this.name = name;
-//        setDueDateFromString("Jan 30 12:00");
-        //setDueDateFromString("2000-01-01 12:00");
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setDueDate(Calendar calendar) {
         this.dueDate = calendar.getTime();
     }
 
-    public void setDate(int year, int month, int day) {
-        if (this.dueDate == null) {
-            Calendar calendar = new GregorianCalendar(year, month, day);
-            this.dueDate = calendar.getTime();
-        } else {
-            // Get the date object and change only the fields which have changed.
-            Calendar calendar = new GregorianCalendar();
-            calendar.setTime(this.dueDate);
-            calendar.set(Calendar.YEAR, year);
-            calendar.set(Calendar.MONTH, month);
-            calendar.set(Calendar.DAY_OF_MONTH, day);
-            this.dueDate = calendar.getTime();
-        }
-    }
-
-    public void setTime(int hour, int minutes) {
-        if (this.dueDate == null) {
-            // If only setting time and not the date; it should consider current date
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.HOUR, hour);
-            calendar.set(Calendar.MINUTE, minutes);
-            this.dueDate = calendar.getTime();
-        } else {
-            // Get the date object and change only the fields which have changed.
-            Calendar calendar = new GregorianCalendar();
-            calendar.setTime(this.dueDate);
-            calendar.set(Calendar.HOUR, hour);
-            calendar.set(Calendar.MINUTE, minutes);
-            this.dueDate = calendar.getTime();
-        }
-    }
     public Date getDueDate() {
         return dueDate;
     }

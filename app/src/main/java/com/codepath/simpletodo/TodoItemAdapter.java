@@ -1,8 +1,7 @@
 package com.codepath.simpletodo;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,15 +13,22 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.codepath.model.Item;
 
-import java.util.Date;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class TodoItemAdapter extends ArrayAdapter<Item> {
+    /**
+     * NOTE: ListView recycles the "position" attribute hence you cannot rely on that
+     * to find the correct object which got clicked. Hence the trick here is to put a
+     * unique identifier (itemId) in the ViewHolder object which we can later access from main
+     * activity. This info will be used to correctly identify the object for an operation.
+     */
     // View lookup cache
-    private static class ViewHolder {
+    public static class ViewHolder {
         TextView todoItemName;
         TextView dueDate;
         ImageView letterLabel;
+        long itemId; // IMPORTANT: Binds the listView row element with DB row.
     }
 
     public TodoItemAdapter(Context context, ArrayList<Item> items) {
@@ -58,7 +64,11 @@ public class TodoItemAdapter extends ArrayAdapter<Item> {
         TextDrawable drawable = getDrawable(item);
 
         // Populate the data into the template view using the data object
-        viewHolder.todoItemName.setText(item.name);
+        viewHolder.todoItemName.setText(item.getName());
+        // This will used to retrieve the element from db when an item is clicked. For more context
+        // read the NOTE at the top of this file.
+        viewHolder.itemId = item.getId();
+
         // Make the TextView scrollable to fit long lines
 //        viewHolder.todoItemName.setMovementMethod(new ScrollingMovementMethod());
 
@@ -76,7 +86,7 @@ public class TodoItemAdapter extends ArrayAdapter<Item> {
     private TextDrawable getDrawable(Item item) {
         ColorGenerator generator = ColorGenerator.MATERIAL; // or use DEFAULT
         // generate color based on a key (same key returns the same color), useful for list/grid views
-        int color = generator.getColor(item.name);
+        int color = generator.getColor(item.getName());
 
         // declare the builder object once.
         TextDrawable.IBuilder builder = TextDrawable.builder()
@@ -86,8 +96,7 @@ public class TodoItemAdapter extends ArrayAdapter<Item> {
                 .round();
 
         // reuse the builder specs to create multiple drawables
-        String firstLetterStr = "" + item.name.toUpperCase().charAt(0); //Convert char to string
+        String firstLetterStr = "" + item.getName().toUpperCase().charAt(0); //Convert char to string
         return builder.build(firstLetterStr, color);
     }
-
 }

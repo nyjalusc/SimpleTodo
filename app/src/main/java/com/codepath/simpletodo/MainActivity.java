@@ -1,19 +1,15 @@
 package com.codepath.simpletodo;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -80,12 +76,16 @@ public class MainActivity extends ActionBarActivity {
         lvItems.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, final View view, final int position, long id) {
+                // Use getTag to get the clicked ViewHolder object defined in TodoItemAdapter class
+                Object clickedObject = view.getTag();
+                final long itemId = ((TodoItemAdapter.ViewHolder) clickedObject).itemId;
+
                 // Fade-out animation effect
                 view.animate().setDuration(1000).alpha(0)
                         .withEndAction(new Runnable() {
                             @Override
                             public void run() {
-                                deleteSingleItemAndRefreshView(position);
+                                deleteSingleItemAndRefreshView(itemId);
                                 view.setAlpha(1);
                             }
                         });
@@ -99,15 +99,17 @@ public class MainActivity extends ActionBarActivity {
         lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // NOTE: Casting - (String) parent.getItemAtPosition(position) will fail
-                // Explicitly invoke the toString() over the Item object
-                Item clickedItem = (Item) parent.getItemAtPosition(position);
-                String currentItemValue = clickedItem.name;
+                /**
+                 * NOTE: ListView recycled the "position" attribute hence you cannot rely on that attribute
+                 * to find the correct object which got clicked.
+                 */
+                // Use getTag to get the clicked ViewHolder object defined in TodoItemAdapter class
+                Object clickedObject = view.getTag();
+                long itemId = ((TodoItemAdapter.ViewHolder) clickedObject).itemId;
 
                 // first parameter is the context, second is the class of the activity to launch
                 Intent i = new Intent(MainActivity.this, EditItemActivity.class);
-                i.putExtra("position", position);
-                i.putExtra("currentValue", currentItemValue);
+                i.putExtra("itemId", itemId);
 
                 // REQUEST_CODE will be used to evaluate the result of the second (child) activity
                 startActivityForResult(i, REQUEST_CODE); // brings up the second activity
@@ -117,10 +119,10 @@ public class MainActivity extends ActionBarActivity {
 
     /**
      * Delete the Item object and update the adapter to refresh the view
-     * @param position
+     * @param itemId
      */
-    protected void deleteSingleItemAndRefreshView(int position) {
-        Item removeItem = dbHelper.getItem(position);
+    protected void deleteSingleItemAndRefreshView(long itemId) {
+        Item removeItem = dbHelper.getItem(itemId);
         todoItemsAdapter.remove(removeItem);
         removeItem.delete();
     }
