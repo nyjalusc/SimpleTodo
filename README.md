@@ -5,7 +5,11 @@ operations: add, delete and edit. Plans to improve and extend the app are curren
 
 * New improved UI.
 * Added a feature to specify due date for todoItem (optional attribute).
+* Highlighted row for items which are past the due-date
 
 Gif for the usage/workflow of the app:
 
-![alt tag](https://github.com/nyjalusc/SimpleTodo/blob/master/SimpleTodoWalkthrough2.gif)
+Gif walkthrough            |  Highlight item past Duedate
+:-------------------------:|:-------------------------:
+![alt tag](https://github.com/nyjalusc/SimpleTodo/blob/master/SimpleTodoWalkthrough2.gif)  |  ![alt tag](https://github.com/nyjalusc/SimpleTodo/blob/master/Screenshot_Colored_Row.png)
+
