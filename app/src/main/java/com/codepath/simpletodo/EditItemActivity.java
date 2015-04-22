@@ -126,7 +126,8 @@ public class EditItemActivity extends ActionBarActivity {
             }
 
         });
-        alertDialog.setTitle("Update datetime");
+        // Figure out a way to format it nicely and then show the alertDialog title
+//        alertDialog.setTitle("Update datetime");
         alertDialog.setView(dialogView);
         alertDialog.show();
     }
