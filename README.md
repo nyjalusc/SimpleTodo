@@ -6,6 +6,7 @@ operations: add, delete and edit. Plans to improve and extend the app are curren
 * New improved UI.
 * Added a feature to specify due date for todoItem (optional attribute).
 * Highlighted row for items which are past the due-date
+* New items added should go at the top of listView
 
 Gif for the usage/workflow of the app:
 

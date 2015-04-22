@@ -21,6 +21,7 @@ import com.codepath.model.Item;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -59,7 +60,8 @@ public class MainActivity extends ActionBarActivity {
 //        todoItemsAdapter = new ArrayAdapter<Item>(this, android.R.layout.simple_list_item_1, todoItems);
         ArrayList<Item> allItems = new ArrayList<Item>();
         allItems.addAll(todoItems);
-//        Collections.reverse(allItems);
+        // Reverse the list to show new elements at the top
+        Collections.reverse(allItems);
         todoItemsAdapter = new TodoItemAdapter(this, allItems);
 
         // Connect the adapter to listView element
@@ -148,7 +150,10 @@ public class MainActivity extends ActionBarActivity {
      */
     private void refreshListView() {
         todoItemsAdapter.clear();
-        todoItemsAdapter.addAll(dbHelper.getAll());
+        List<Item> allItems = dbHelper.getAll();
+        // Reverse the list to show new elements at the top
+        Collections.reverse(allItems);
+        todoItemsAdapter.addAll(allItems);
         todoItemsAdapter.notifyDataSetChanged();
     }
 
@@ -210,8 +215,8 @@ public class MainActivity extends ActionBarActivity {
         calendar = null;
         item.save();
 
-        // Insert the object in adapter
-        todoItemsAdapter.add(item);
+        // Insert the object in adapter at index 0 (first position in the list)
+        todoItemsAdapter.insert(item, 0);
 
         // Empty the edit text field once the operation completes
         etNewItem.setText("");
