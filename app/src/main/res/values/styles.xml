@@ -9,8 +9,12 @@
         <!-- Customize your theme here. -->
         <!--<item name="android:colorPrimaryDark">#004D40</item>-->
         <item name="android:colorPrimaryDark">@color/dark_teal</item>
+        <!--If not null then cursor inherits the same color as primary color-->
+        <!--and if the background is of same color as that of the cursor, the cursor-->
+        <!--becomes invisible Eg. the editText element in searchView -->
+        <item name="android:textCursorDrawable">@null</item>
         <!--<item name="android:actionBarStyle">@style/CustomActionBarTheme</item>-->
-        <item name="android:actionBarStyle">@style/MyActionBar</item>
+        <!--<item name="android:actionBarStyle">@style/MyActionBar</item>-->
         <!--<item name="android:actionBarStyle">@style/MyActionBar</item>-->
         <!--<item name="actionBarStyle">@style/MyActionBar</item>-->
         <!--<item name="android:background">#009688</item>-->
@@ -19,17 +23,17 @@
 
     <!-- ActionBar styles -->
     <!--<style name="CustomActionBarTheme" parent="@style/Theme.AppCompat.Light">-->
-    <style name="CustomActionBarTheme" parent="Base.Widget.AppCompat.ActionBar">
-        <item name="android:actionBarStyle">@style/MyActionBar</item>
-        <item name="actionBarStyle">@style/MyActionBar</item>
-
-    </style>
-
-    <style name="MyActionBar" parent="Widget.AppCompat.ActionBar">
-
-        <item name="android:background">@color/teal</item>
-        <item name="background">@color/teal</item>
-
-    </style>
+    <!--<style name="CustomActionBarTheme" parent="Base.Widget.AppCompat.ActionBar">-->
+        <!--<item name="android:actionBarStyle">@style/MyActionBar</item>-->
+        <!--<item name="actionBarStyle">@style/MyActionBar</item>-->
+<!---->
+    <!--</style>-->
+<!---->
+    <!--<style name="MyActionBar" parent="Widget.AppCompat.ActionBar">-->
+<!---->
+        <!--<item name="android:background">@color/teal</item>-->
+        <!--<item name="background">@color/teal</item>-->
+<!---->
+    <!--</style>-->
 
 </resources>

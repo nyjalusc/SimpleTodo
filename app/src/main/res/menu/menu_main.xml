@@ -3,4 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" app:showAsAction="never" />
+
+        <!-- Search / will display always -->
+        <item android:id="@+id/search"
+            android:title="@string/search"
+            app:showAsAction="ifRoom"
+            app:actionViewClass="android.support.v7.widget.SearchView" />
+        <!--Ifroom will show it on the action bar where as the collapseActionView will place-->
+        <!--it in the menu options list (three vertical dots) -->
+        <!--android:showAsAction="ifRoom|collapseActionView"-->
+
 </menu>

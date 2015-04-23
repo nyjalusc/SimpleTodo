@@ -1,11 +1,13 @@
 package com.codepath.simpletodo;
 
 import android.app.AlertDialog;
+import android.app.SearchManager;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +23,6 @@ import com.codepath.model.Item;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -29,6 +30,7 @@ import java.util.List;
 public class MainActivity extends ActionBarActivity {
 
     private TodoItemAdapter todoItemsAdapter;
+    private Resources res;
     private static Calendar calendar;
     private ListView lvItems;
     private DatabaseHelper dbHelper;
@@ -42,9 +44,17 @@ public class MainActivity extends ActionBarActivity {
         // Wasted lot of time to set the color of actionbar from xml but failed :(
         // Finally gave up and decided to set it programmatically
         // Bad Design: Fix it after figuring out a way to do this through resources
-        Resources res = getResources();
+        res = getResources();
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(res.getColor(R.color.teal)));
+
+        // Get the intent, verify the action and get the query
+        Intent intent = getIntent();
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            Toast.makeText(this, query, Toast.LENGTH_SHORT).show();
+        }
+
         init();
     }
 
@@ -60,8 +70,6 @@ public class MainActivity extends ActionBarActivity {
 //        todoItemsAdapter = new ArrayAdapter<Item>(this, android.R.layout.simple_list_item_1, todoItems);
         ArrayList<Item> allItems = new ArrayList<Item>();
         allItems.addAll(todoItems);
-        // Reverse the list to show new elements at the top
-        Collections.reverse(allItems);
         todoItemsAdapter = new TodoItemAdapter(this, allItems);
 
         // Connect the adapter to listView element
@@ -151,8 +159,6 @@ public class MainActivity extends ActionBarActivity {
     private void refreshListView() {
         todoItemsAdapter.clear();
         List<Item> allItems = dbHelper.getAll();
-        // Reverse the list to show new elements at the top
-        Collections.reverse(allItems);
         todoItemsAdapter.addAll(allItems);
         todoItemsAdapter.notifyDataSetChanged();
     }
@@ -169,6 +175,34 @@ public class MainActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        // Obtain the searchView
+        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        // Couldn't set the hint using XML :(
+        searchView.setQueryHint(res.getString(R.string.search_hint));
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String searchTerm) {
+//                todoItemsAdapter.getFilter().filter(newText);
+
+                // DB operations are costly, try to use the getFilter() method instead
+                if (!searchTerm.isEmpty()) {
+                    List<Item> searchItems = dbHelper.searchItem(searchTerm);
+                    todoItemsAdapter.clear();
+                    todoItemsAdapter.addAll(searchItems);
+                    todoItemsAdapter.notifyDataSetChanged();
+                } else {
+                    // Restore the adapter if searchTerm is empty
+                    refreshListView();
+                }
+                return false;
+            }
+        });
         return true;
     }
 
@@ -227,31 +261,31 @@ public class MainActivity extends ActionBarActivity {
      * @param view
      */
     public void showDatePicker(View view) {
-            final View dialogView = View.inflate(this, R.layout.date_picker, null);
-            final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        final View dialogView = View.inflate(this, R.layout.date_picker, null);
+        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
 
-            dialogView.findViewById(R.id.ibSaveDate).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    DatePicker datePicker = (DatePicker) dialogView.findViewById(R.id.date_picker);
-                    if (calendar == null) {
-                        calendar = new GregorianCalendar(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
-                    } else {
-                        // This is to handle the case where the user is trying to edit the previously
-                        // saved due-date but has not added the item yet by pressing the "Add button"
-                        calendar.set(Calendar.YEAR, datePicker.getYear());
-                        calendar.set(Calendar.HOUR, datePicker.getMonth());
-                        calendar.set(Calendar.MINUTE, datePicker.getDayOfMonth());
-                    }
-                    // When the "Done" action is performed load the TimePicker
-                    showTimePicker(view);
-                    // Destroy the view after the operations complete
-                    alertDialog.dismiss();
+        dialogView.findViewById(R.id.ibSaveDate).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatePicker datePicker = (DatePicker) dialogView.findViewById(R.id.date_picker);
+                if (calendar == null) {
+                    calendar = new GregorianCalendar(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
+                } else {
+                    // This is to handle the case where the user is trying to edit the previously
+                    // saved due-date but has not added the item yet by pressing the "Add button"
+                    calendar.set(Calendar.YEAR, datePicker.getYear());
+                    calendar.set(Calendar.HOUR, datePicker.getMonth());
+                    calendar.set(Calendar.MINUTE, datePicker.getDayOfMonth());
                 }
-            });
+                // When the "Done" action is performed load the TimePicker
+                showTimePicker(view);
+                // Destroy the view after the operations complete
+                alertDialog.dismiss();
+            }
+        });
 //            alertDialog.setTitle("Set target datetime");
-            alertDialog.setView(dialogView);
-            alertDialog.show();
+        alertDialog.setView(dialogView);
+        alertDialog.show();
     }
 
     /**

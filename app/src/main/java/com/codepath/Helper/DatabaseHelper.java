@@ -2,9 +2,9 @@ package com.codepath.Helper;
 
 import com.activeandroid.query.Select;
 import com.activeandroid.util.SQLiteUtils;
+import com.codepath.model.Item;
 
 import java.util.List;
-import com.codepath.model.Item;
 
 public class DatabaseHelper {
     /**
@@ -13,9 +13,11 @@ public class DatabaseHelper {
      * @return
      */
     public List<Item> getAll() {
-        return new Select()
+        List<Item> items = new Select()
                 .from(Item.class)
+                .orderBy("Id DESC")
                 .execute();
+        return items;
     }
 
     /**
@@ -35,6 +37,20 @@ public class DatabaseHelper {
         return new Select()
                 .from(Item.class)
                 .where("Id = ?", itemId).executeSingle();
+    }
 
+    /**
+     * Performs a "LIKE" query. Used in search widget.
+     * @param searchTerm
+     * @return
+     */
+    public List<Item> searchItem(String searchTerm) {
+        String likeQueryTerm = '%' + searchTerm + '%';
+        List<Item> items = new Select()
+                .from(Item.class)
+                .where("Name LIKE ?", likeQueryTerm)
+                .orderBy("Id DESC")
+                .execute();
+        return items;
     }
 }

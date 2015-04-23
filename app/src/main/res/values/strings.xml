@@ -10,4 +10,7 @@
     <string name="tvEditItemLabel">Edit Item Below:</string>
     <string name="editDate">Edit Date</string>
     <string name="editTIme">Edit Time</string>
+    <string name="app_label">app label</string>
+    <string name="search_hint">Search todo items</string>
+    <string name="search">Search String</string>
 </resources>

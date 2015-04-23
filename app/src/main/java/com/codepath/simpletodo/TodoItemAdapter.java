@@ -1,11 +1,11 @@
 package com.codepath.simpletodo;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,7 +16,7 @@ import com.codepath.model.Item;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class TodoItemAdapter extends ArrayAdapter<Item> {
+public class TodoItemAdapter extends ArrayAdapter<Item> implements Filterable {
     /**
      * NOTE: ListView recycles the "position" attribute hence you cannot rely on that
      * to find the correct object which got clicked. Hence the trick here is to put a
