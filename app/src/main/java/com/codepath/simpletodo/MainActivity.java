@@ -11,6 +11,8 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -35,18 +37,28 @@ public class MainActivity extends ActionBarActivity {
     private ListView lvItems;
     private DatabaseHelper dbHelper;
     private final int REQUEST_CODE = 20;
+    private android.support.v7.app.ActionBar actionBar;
+    private View rootView;
+
+    private float mActionBarHeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         // Wasted lot of time to set the color of actionbar from xml but failed :(
         // Finally gave up and decided to set it programmatically
         // Bad Design: Fix it after figuring out a way to do this through resources
         res = getResources();
-        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar = getSupportActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(res.getColor(R.color.teal)));
+//        actionBar.setHideOnContentScrollEnabled(true);
+
+        rootView = getWindow().getDecorView().findViewById(android.R.id.content);
+        rootView.setPadding(0, actionBar.getHeight(), 0, 0);
 
         // Get the intent, verify the action and get the query
         Intent intent = getIntent();
@@ -123,6 +135,41 @@ public class MainActivity extends ActionBarActivity {
 
                 // REQUEST_CODE will be used to evaluate the result of the second (child) activity
                 startActivityForResult(i, REQUEST_CODE); // brings up the second activity
+            }
+        });
+
+
+        // SHOW / HIDE Actionbar on scrolling
+        lvItems.setOnScrollListener(new AbsListView.OnScrollListener() {
+            int mLastFirstVisibleItem = 0;
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (view.getId() == lvItems.getId()) {
+                    final int currentFirstVisibleItem = lvItems.getFirstVisiblePosition();
+
+                    if (currentFirstVisibleItem > mLastFirstVisibleItem) {
+                        // getSherlockActivity().getSupportActionBar().hide();
+//                        getSupportActionBar().hide();
+                        actionBar.hide();
+                        rootView.setPadding(0, 0, 0, 0);
+                    } else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
+                        // getSherlockActivity().getSupportActionBar().show();
+
+                        float scale = getResources().getDisplayMetrics().density;
+                        int dpAsPixels = (int) (16 *scale + 0.5f);
+
+//                        getSupportActionBar().show();
+                        actionBar.show();
+                        rootView.setPadding(0, 0, 0, 0);
+                    }
+
+                    mLastFirstVisibleItem = currentFirstVisibleItem;
+                }
             }
         });
     }
