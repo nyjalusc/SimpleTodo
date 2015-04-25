@@ -15,37 +15,11 @@
         <!--becomes invisible Eg. the editText element in searchView -->
         <item name="android:textCursorDrawable">@null</item>
 
+        <item name="android:editTextBackground">@drawable/apptheme_edit_text_holo_light</item>
 
-        <!--<item name="android:windowActionBarOverlay">true</item>-->
-        <!-- Support library compatibility -->
-        <!--<item name="windowActionBarOverlay">true</item>-->
-
-        <!--<item name="android:actionBarStyle">@style/CustomActionBarTheme</item>-->
-        <!--<item name="android:actionBarStyle">@style/MyActionBar</item>-->
-        <!--<item name="android:actionBarStyle">@style/MyActionBar</item>-->
-        <!--<item name="actionBarStyle">@style/MyActionBar</item>-->
-        <!--<item name="android:background">#009688</item>-->
-        <!--<item name="android:colorPrimary">#009688</item>-->
+        <item name="android:textColorHighlight">@color/light_teal</item>
+        <item name="android:textSelectHandleLeft">@drawable/apptheme_text_select_handle_left</item>
+        <item name="android:textSelectHandleRight">@drawable/apptheme_text_select_handle_right</item>
+        <item name="android:textSelectHandle">@drawable/apptheme_text_select_handle_middle</item>
     </style>
-
-
-    <!-- the theme applied to the application or activity -->
-    <style name="CustomActionBarTheme" parent="Theme.AppCompat">
-    </style>
-
-    <!-- ActionBar styles -->
-    <!--<style name="CustomActionBarTheme" parent="@style/Theme.AppCompat.Light">-->
-    <!--<style name="CustomActionBarTheme" parent="Base.Widget.AppCompat.ActionBar">-->
-    <!--<item name="android:actionBarStyle">@style/MyActionBar</item>-->
-    <!--<item name="actionBarStyle">@style/MyActionBar</item>-->
-    <!---->
-    <!--</style>-->
-    <!---->
-    <!--<style name="MyActionBar" parent="Widget.AppCompat.ActionBar">-->
-    <!---->
-    <!--<item name="android:background">@color/teal</item>-->
-    <!--<item name="background">@color/teal</item>-->
-    <!---->
-    <!--</style>-->
-
 </resources>

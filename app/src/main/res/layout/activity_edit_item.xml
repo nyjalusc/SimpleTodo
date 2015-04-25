@@ -17,11 +17,11 @@
         android:id="@+id/etTextField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:inputType="text|textCapSentences|textMultiLine"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="47dp"
         android:ems="10"
-        android:inputType="textMultiLine"
         android:layout_toLeftOf="@+id/ibEditDueDate"
         android:layout_toStartOf="@+id/ibEditDueDate" />
 
