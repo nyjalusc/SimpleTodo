@@ -33,6 +33,8 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="text|textCapSentences|textMultiLine"
+        android:textColorHighlight="@color/light_teal"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:id="@+id/etNewItem"
         android:hint="@string/enter_new_item"
