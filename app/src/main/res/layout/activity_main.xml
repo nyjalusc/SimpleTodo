@@ -26,7 +26,7 @@
         android:id="@+id/lvItems"
         android:layout_alignParentTop="true"
         android:layout_toStartOf="@+id/ibAddItem"
-        android:layout_above="@+id/etNewItem"
+        android:layout_above="@+id/ibAddItem"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
