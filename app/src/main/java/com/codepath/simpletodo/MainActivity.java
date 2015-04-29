@@ -2,6 +2,7 @@ package com.codepath.simpletodo;
 
 import android.app.AlertDialog;
 import android.app.SearchManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
@@ -261,11 +262,45 @@ public class MainActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.clear_list) {
+            clearList();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void clearList() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+        // set title
+        alertDialogBuilder.setTitle("Clear list");
+
+        // set dialog message
+        alertDialogBuilder
+                .setMessage("Are you sure you want to delete all items?")
+                .setCancelable(true)
+                .setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int id) {
+                        Toast.makeText(MainActivity.this, "Say goodbye to all your data!", Toast.LENGTH_SHORT).show();
+                        // if this button is clicked, delete all items
+//                        dbHelper.deleteAll();
+                    }
+                })
+                .setNegativeButton("No",new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int id) {
+                        Toast.makeText(MainActivity.this, "Phew! that was close!", Toast.LENGTH_SHORT).show();
+                        // if this button is clicked, just close
+                        // the dialog box and do nothing
+                        dialog.cancel();
+                    }
+                });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
     }
 
     /**
