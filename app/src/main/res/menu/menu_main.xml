@@ -5,6 +5,9 @@
     <item android:id="@+id/clear_list" android:title="@string/clear_list"
         android:orderInCategory="100" app:showAsAction="never" />
 
+    <item android:id="@+id/clear_expired" android:title="@string/clear_expired"
+        android:orderInCategory="100" app:showAsAction="never" />
+
         <!-- Search / will display always -->
         <item android:id="@+id/search"
             android:title="@string/search"

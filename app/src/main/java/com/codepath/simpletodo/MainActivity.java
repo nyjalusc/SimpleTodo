@@ -27,6 +27,7 @@ import com.codepath.model.Item;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -150,27 +151,29 @@ public class MainActivity extends ActionBarActivity {
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if (view.getId() == lvItems.getId()) {
-                    final int currentFirstVisibleItem = lvItems.getFirstVisiblePosition();
-
-                    if (currentFirstVisibleItem > mLastFirstVisibleItem) {
-                        // getSherlockActivity().getSupportActionBar().hide();
-//                        getSupportActionBar().hide();
-                        actionBar.hide();
-                        rootView.setPadding(0, 0, 0, 0);
-                    } else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
-                        // getSherlockActivity().getSupportActionBar().show();
-
-                        float scale = getResources().getDisplayMetrics().density;
-                        int dpAsPixels = (int) (16 *scale + 0.5f);
-
-//                        getSupportActionBar().show();
-                        actionBar.show();
-                        rootView.setPadding(0, 0, 0, 0);
-                    }
-
-                    mLastFirstVisibleItem = currentFirstVisibleItem;
-                }
+                // NOTE: The following commented out code causing flickering when the actionbar is
+                // made to hide or show :(
+//                if (view.getId() == lvItems.getId()) {
+//                    final int currentFirstVisibleItem = lvItems.getFirstVisiblePosition();
+//
+//                    if (currentFirstVisibleItem > mLastFirstVisibleItem) {
+//                        // getSherlockActivity().getSupportActionBar().hide();
+////                        getSupportActionBar().hide();
+//                        actionBar.hide();
+//                        rootView.setPadding(0, 0, 0, 0);
+//                    } else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
+//                        // getSherlockActivity().getSupportActionBar().show();
+//
+//                        float scale = getResources().getDisplayMetrics().density;
+//                        int dpAsPixels = (int) (16 *scale + 0.5f);
+//
+////                        getSupportActionBar().show();
+//                        actionBar.show();
+//                        rootView.setPadding(0, 0, 0, 0);
+//                    }
+//
+//                    mLastFirstVisibleItem = currentFirstVisibleItem;
+//                }
             }
         });
     }
@@ -267,9 +270,35 @@ public class MainActivity extends ActionBarActivity {
             return true;
         }
 
+        switch (item.getItemId()) {
+            case R.id.clear_list:
+                clearList();
+                return true;
+
+            case R.id.clear_expired:
+                clearExpired();
+                return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Deletes expired items
+     */
+    private void clearExpired() {
+        List<Item> expiredItems = dbHelper.getExpiredItems();
+        for (Iterator<Item> i = expiredItems.iterator(); i.hasNext();) {
+            Item expiredItem = i.next();
+            todoItemsAdapter.remove(expiredItem);
+            expiredItem.delete();
+        }
+        Toast.makeText(this, "Expired items deleted", Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Asks for users confirmation before deleting all items
+     */
     private void clearList() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
@@ -284,7 +313,8 @@ public class MainActivity extends ActionBarActivity {
                     public void onClick(DialogInterface dialog,int id) {
                         Toast.makeText(MainActivity.this, "Say goodbye to all your data!", Toast.LENGTH_SHORT).show();
                         // if this button is clicked, delete all items
-//                        dbHelper.deleteAll();
+                        dbHelper.deleteAll();
+                        refreshListView();
                     }
                 })
                 .setNegativeButton("No",new DialogInterface.OnClickListener() {

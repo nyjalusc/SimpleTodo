@@ -4,6 +4,7 @@ import com.activeandroid.query.Select;
 import com.activeandroid.util.SQLiteUtils;
 import com.codepath.model.Item;
 
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class DatabaseHelper {
@@ -52,5 +53,12 @@ public class DatabaseHelper {
                 .orderBy("Id DESC")
                 .execute();
         return items;
+    }
+
+    public List<Item> getExpiredItems() {
+        return new Select()
+                .from(Item.class)
+                .where("DueDate < ?", new GregorianCalendar().getTimeInMillis())
+                .execute();
     }
 }
