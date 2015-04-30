@@ -12,6 +12,4 @@ operations: add, delete and edit. Plans to improve and extend the app are curren
 
 Gif for the usage/workflow of the app:
 
-Gif walkthrough            
-:-------------------------:
 ![alt tag](https://github.com/nyjalusc/SimpleTodo/blob/master/SimpleTodoWalkthrough3.gif)
