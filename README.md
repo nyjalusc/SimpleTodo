@@ -7,10 +7,11 @@ operations: add, delete and edit. Plans to improve and extend the app are curren
 * Added a feature to specify due date for todoItem (optional attribute).
 * Highlighted row for items which are past the due-date
 * New items added should go at the top of listView
+* Search based on the name of the todoItem (Implemented using the search widget)
+* Implemented option items for clearing expired items and deleting all the items
 
 Gif for the usage/workflow of the app:
 
-Gif walkthrough            |  Highlight item past Duedate
-:-------------------------:|:-------------------------:
-![alt tag](https://github.com/nyjalusc/SimpleTodo/blob/master/SimpleTodoWalkthrough2.gif)  |  ![alt tag](https://github.com/nyjalusc/SimpleTodo/blob/master/Screenshot_Colored_Row.png)
-
+Gif walkthrough            
+:-------------------------:
+![alt tag](https://github.com/nyjalusc/SimpleTodo/blob/master/SimpleTodoWalkthrough3.gif)
